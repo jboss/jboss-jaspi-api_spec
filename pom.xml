@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.jboss.spec</groupId>
     <artifactId>jboss-specs-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.Beta1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jboss.spec.javax.security</groupId>
+  <groupId>org.jboss.spec.javax.security.auth.message</groupId>
   <artifactId>jboss-jaspi-api_1.0_spec</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>

@@ -80,7 +80,7 @@ public class PrivateKeyCallback implements Callback
    /** 
     * <p>Request type for private keys that are identified via an issuer/serial number.</p> 
     */
-   public static class IssuerSerialNumRequest
+   public static class IssuerSerialNumRequest implements Request
    {
       private X500Principal issuer; 
       private java.math.BigInteger serialNumber;
@@ -110,7 +110,7 @@ public class PrivateKeyCallback implements Callback
        * Get the serial number.
        * @return the issuer, or null.
        */
-      public BigInteger getSerialNumber()
+      public BigInteger getSerialNum()
       {
          return serialNumber;
       } 
@@ -118,7 +118,7 @@ public class PrivateKeyCallback implements Callback
    /**
     * <p>Request type for private keys that are identified via a SubjectKeyID</p>
     */
-   public static class SubjectKeyIDRequest
+   public static class SubjectKeyIDRequest implements Request
    {
       private byte[] subjectKeyID;
       
@@ -147,6 +147,46 @@ public class PrivateKeyCallback implements Callback
          return subjectKeyID;
       } 
    } 
+
+   /**
+    *  Request type for private keys that are identified using a certificate digest or thumbprint. 
+    */
+   public static class DigestRequest
+   {
+      private  byte[] theDigest;
+      private  String theAlgorithm;
+
+      /**
+       *<p>
+       * Constructs a DigestRequest with a digest value and algorithm identifier.
+       *</p>
+       *
+       * <p> 
+       * The digest of the certificate whose private key is returned must match the provided digest. 
+       * The certificate digest is computed by applying the specified algorithm to the bytes of the 
+       * certificate. For example: MessageDigest.getInstance(algorithm).digest(cert.getEncoded()) . 
+       * The corresponding certificate chain for the private key is also returned. If the digest or 
+       * algorithm parameters are null, the handler of the callback relies on its own defaults.
+       * </p>
+       **/
+      public DigestRequest( byte[] digest, String algorithm )
+      {
+         theDigest = digest;
+         theAlgorithm = algorithm;
+      }
+
+      public byte[] getDigest()
+      {
+          return theDigest;
+      }
+
+      public java.lang.String getAlgorithm()
+      {
+          return theAlgorithm;
+      }
+
+      
+   }
    
    //Private Variables
    private Request request = null;

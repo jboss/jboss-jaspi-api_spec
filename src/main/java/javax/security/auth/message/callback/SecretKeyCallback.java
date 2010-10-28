@@ -71,4 +71,28 @@ public class SecretKeyCallback implements Callback
          return alias;
       } 
    }
+
+
+   private Request request;
+   private  javax.crypto.SecretKey key; 
+
+   public SecretKeyCallback(SecretKeyCallback.Request request)
+   {
+      this.request = request;
+   }
+
+   public Request getRequest()
+   {
+      return request;
+   }
+
+   public void setKey(javax.crypto.SecretKey key)
+   {
+      this.key = key;
+   }
+
+   public javax.crypto.SecretKey getKey()
+   {
+      return key;
+   }
 }

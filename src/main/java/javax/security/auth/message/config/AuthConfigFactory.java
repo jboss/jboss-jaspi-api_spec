@@ -83,11 +83,10 @@ import javax.security.auth.message.AuthException;
 public abstract class AuthConfigFactory
 {
    private static AuthConfigFactory _factory = null;
-   private static final String FACTORY_PROP = "authconfigprovider.factory";
-   
-   /** The default AuthConfigFactory implementation */
-   static final String DEFAULT_FACTORY_SECURITY_PROPERTY = 
-      "org.jboss.security.auth.message.config.JBossAuthConfigFactory";
+   public static final String DEFAULT_FACTORY_SECURITY_PROPERTY = "authconfigprovider.factory";
+
+   /* The default AuthConfigFactory implementation  */
+   private static final String FACTORY_IMPL = "org.jboss.security.auth.message.config.JBossAuthConfigFactory";
    
    public AuthConfigFactory()
    { 
@@ -231,10 +230,10 @@ public abstract class AuthConfigFactory
    
    public abstract String[] getRegistrationIDs(AuthConfigProvider provider);
    
-   public abstract void refresh() throws AuthException, SecurityException;
+   public abstract void refresh();
    
    public abstract String registerConfigProvider( String className, Map properties,String layer,
-           String appContext,  String description) throws AuthException, SecurityException;
+           String appContext,  String description);
    
    public abstract java.lang.String registerConfigProvider(AuthConfigProvider provider,
           String layer,  String appContext,  String description);
@@ -294,11 +293,11 @@ public abstract class AuthConfigFactory
       public Object run()
          throws Exception
       {
-         name = System.getProperty(FACTORY_PROP);
+         name = System.getProperty(DEFAULT_FACTORY_SECURITY_PROPERTY);
          if( name == null )
          {
             // Use the default factory impl
-            name = DEFAULT_FACTORY_SECURITY_PROPERTY;
+            name = FACTORY_IMPL;
          }
          ClassLoader loader = Thread.currentThread().getContextClassLoader();
          Class factoryClass = loader.loadClass(name);

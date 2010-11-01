@@ -135,5 +135,5 @@ public interface AuthConfigProvider
     * @throws SecurityException if the caller does not have permission to 
     *                    refresh the provider.
     */
-   void refresh() throws AuthException, SecurityException;
+   void refresh();
 }

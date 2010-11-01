@@ -151,7 +151,7 @@ public class PrivateKeyCallback implements Callback
    /**
     *  Request type for private keys that are identified using a certificate digest or thumbprint. 
     */
-   public static class DigestRequest
+   public static class DigestRequest implements Request
    {
       private  byte[] theDigest;
       private  String theAlgorithm;

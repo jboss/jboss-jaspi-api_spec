@@ -65,5 +65,5 @@ public interface AuthConfig
     * @throws SecurityException if the caller does not have permission to refresh 
     *                           the configuration object.
     */
-   void refresh() throws AuthException, SecurityException;
+   void refresh();
 }

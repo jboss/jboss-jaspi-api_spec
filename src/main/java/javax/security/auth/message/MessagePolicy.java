@@ -35,7 +35,7 @@ package javax.security.auth.message;
  */
 public class MessagePolicy
 { 
-   protected TargetPolicy[] targetPolicies = null;
+   private TargetPolicy[] targetPolicies = null;
    private boolean mandatory;
    
    /** 
@@ -118,8 +118,8 @@ public class MessagePolicy
    public static class TargetPolicy
    {
       
-      protected ProtectionPolicy protectionPolicy;
-      protected Target[] targets;
+      private ProtectionPolicy protectionPolicy;
+      private Target[] targets;
       
       /**
        * 
@@ -168,19 +168,20 @@ public class MessagePolicy
    public static interface ProtectionPolicy
    {
       /**
-       * A URI fragment that represents a recipient entity authentication policy AUTHENTICATE_RECIPIENT_CONTENT
+       * The identifer for a ProtectionPolicy that indicates that the sending entity is to be authenticated. 
        */
-      public static final String AUTHENTICATE_SENDER = "http://jboss.org/security/auth/container/auth_sender";
+      public static final String AUTHENTICATE_SENDER = "#authenticateSender";
       
       /**
-       * A URI fragment that represents a source entity authentication policy AUTHENTICATE_SOURCE_CONTENT
+       * The identifer for a ProtectionPolicy that indicates that the message recipient is to be authenticated. 
        */
-      public static final String AUTHENTICATE_RECIPIENT = "http://jboss.org/security/auth/container/auth_recipient";
+      public static final String AUTHENTICATE_RECIPIENT = "#authenticateRecipient";
       
       /**
-       * A URI fragment that represents a data origin authentication policy
+       * The identifer for a ProtectionPolicy that indicates that the origin of data within the message is to be
+       *  authenticated.  That is, the message is to be protected such that its recipients can establish who defined the message content
        */
-      public static final String AUTHENTICATE_CONTENT = "http://jboss.org/security/auth/container/auth_content";
+      public static final String AUTHENTICATE_CONTENT = "#authenticateContent";
        
       /**
        * Get the ProtectionPolicy identifier. An identifier may represent a 

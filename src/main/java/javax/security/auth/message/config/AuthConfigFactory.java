@@ -3,9 +3,10 @@ package javax.security.auth.message.config;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.security.Security;
 import java.security.SecurityPermission;
 import java.util.Map;
-
+import java.util.Properties;
 import javax.security.auth.message.AuthException;
  
 
@@ -63,6 +64,13 @@ public abstract class AuthConfigFactory
 {
    private static AuthConfigFactory _factory = null;
    public static final String DEFAULT_FACTORY_SECURITY_PROPERTY = "authconfigprovider.factory";
+   private static final String PROVIDER_SECURITY_PROPERTY = "authconfigfactory.provider";
+   public static final String GET_FACTORY_PERMISSION_NAME = ("getProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+   public static final String SET_FACTORY_PERMISSION_NAME = ("setProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+   public static final String PROVIDER_REGISTRATION_PERMISSION_NAME = ("setProperty."+PROVIDER_SECURITY_PROPERTY);
+   public static final SecurityPermission getFactorySecurityPermission = new SecurityPermission(GET_FACTORY_PERMISSION_NAME);
+   public static final SecurityPermission setFactorySecurityPermission = new SecurityPermission(SET_FACTORY_PERMISSION_NAME);
+   public static final SecurityPermission providerRegistrationSecurityPermission = new SecurityPermission(PROVIDER_REGISTRATION_PERMISSION_NAME);
 
    /* The default AuthConfigFactory implementation  */
    private static final String FACTORY_IMPL = "org.jboss.security.auth.message.config.JBossAuthConfigFactory";

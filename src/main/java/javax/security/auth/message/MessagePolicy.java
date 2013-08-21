@@ -62,33 +62,33 @@ public class MessagePolicy
     * This interface is implemented by objects that represent and perform message targeting 
     * on behalf of authentication modules.</p>
     * <p>The internal state of a Target indicates whether it applies to the request or 
-    * response message of an AuthParam and to which components it applies within the 
+    * response message of a MessageInfo and to which components it applies within the 
     * identified message.</p> 
     */
    public static interface Target
    {
       /**
-       * Get the Object identified by the Target from the AuthParam.
+       * Get the Object identified by the Target from the MessageInfo.
        * 
-       * @param authParam the AuthParam containing the request or response message from which 
+       * @param messageInfo the MessageInfo containing the request or response message from which 
        *                  the target is to be obtained.
        * @return an Object representing the target, or null when the target could not be found 
-       *                  in the AuthParam.
+       *                  in the MessageInfo.
        */
       public Object get(MessageInfo messageInfo);
       
       /** 
-       * Put the Object into the AuthParam at the location identified by the target.
-       * @param authParam the AuthParam containing the request or response message 
+       * Put the Object into the MessageInfo at the location identified by the target.
+       * @param messageInfo the MessageInfo containing the request or response message 
        *               into which the object is to be put.
        * @param data
        */
       public void put(MessageInfo messageInfo, Object data);
       
       /**
-       * Remove the Object identified by the Target from the AuthParam.
+       * Remove the Object identified by the Target from the MessageInfo.
        * 
-       * @param authParam the AuthParam containing the request or response message from 
+       * @param messageInfo the MessageInfo containing the request or response message from 
        *                  which the target is to be removed.
        */
       public void remove(MessageInfo messageInfo);

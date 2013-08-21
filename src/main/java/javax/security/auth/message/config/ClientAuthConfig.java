@@ -41,17 +41,17 @@ public interface ClientAuthConfig extends AuthConfig
     * returned ClientAuthContext instance. It is the module's responsibility to enforce 
     * these policies when invoked.</p>
     * 
-    * @param operation an operation identifier used to index the provided config, or null. 
-    *                This value must be identical to the value returned by the getOperation
-    *                method for all AuthParam objects passed to the secureRequest method 
+    * @param authContextID a String identifier used to index the provided config, or null. 
+    *                This value must be identical to the value returned by the getAuthContextID
+    *                method for all MessageInfo objects passed to the secureRequest method 
     *                of the returned ClientAuthContext.
     * @param properties a Map object that may be used by the caller to augment the 
     *                properties that will be passed to the encapsulated modules at module 
     *                initialization. The null value may be passed for this parameter.
     * @return a ClientAuthContext instance that encapsulates the ClientAuthModules used to 
     *               secure and validate requests/responses associated with the given 
-    *               operation, or null (indicating that no modules are configured).
-    * @throws AuthException if this operation fails.
+    *               authContextID, or null (indicating that no modules are configured).
+    * @throws AuthException if this method fails.
     */
    public ClientAuthContext getAuthContext(String authContextID,
          Subject clientSubject, Map properties)

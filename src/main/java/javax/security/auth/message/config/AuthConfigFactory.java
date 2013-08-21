@@ -37,17 +37,17 @@ import javax.security.auth.message.AuthException;
  *  <p>A system-wide AuthConfigFactory implementation can be set by invoking 
  *  setFactory, and retrieved via getFactory.</p>
  *  <p>Every implementation of this abstract class must offer a public, zero argument 
- *  constructor. This constructor must support the construction and registration of 
- *  AuthConfigProviders from a persistent declarative representation.</p>
+ *  constructor. This constructor must support the construction and registration (including 
+ *  self-registration) of AuthConfigProviders from a persistent declarative representation.</p>
  *  <p>For example, a factory implementation class could interpret the contents of a 
  *  file containing a sequence of configuration entries, with one entry per 
  *  AuthConfigProvider, with each entry representing the following 5 values:</p>
  *  <ul>
- *  <li>the fully qualified name of the provider implementation class</li>
- *  <li>the pathname of the provider initialization file</li>
- *  <li>the message layer name</li>
- *  <li>the application context identifier</li>
- *  <li>the registration description</li>
+ *  <li>the fully qualified name of the provider implementation class (or null)</li>
+ *  <li>the list of the provider initialization properties (which could be empty)</li>
+ *  <li>the message layer name (or null)</li>
+ *  <li>the application context identifier (or null)</li>
+ *  <li>the registration description (or null)</li>
  *  </ul> 
  *  <p>A value would be required for the implementation class. The remaining values 
  *  could be optional, and when specified, the contents of the provider initialization 
@@ -63,13 +63,30 @@ import javax.security.auth.message.AuthException;
 public abstract class AuthConfigFactory
 {
    private static AuthConfigFactory _factory = null;
+
+   /* The name of the Security property used to define the default AuthConfigFactory implementation class  */
    public static final String DEFAULT_FACTORY_SECURITY_PROPERTY = "authconfigprovider.factory";
+
+   /* The name of the Security property used to control operations within the factory  */
    private static final String PROVIDER_SECURITY_PROPERTY = "authconfigfactory.provider";
+
+   /* The name of the SecurityPermission required to call getFactory  */
    public static final String GET_FACTORY_PERMISSION_NAME = ("getProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+
+   /* The name of the SecurityPermission required to call setFactory  */
    public static final String SET_FACTORY_PERMISSION_NAME = ("setProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+
+   /* The name of the SecurityPermission to be used to authorize access to the update methods of the factory implementation class  */
    public static final String PROVIDER_REGISTRATION_PERMISSION_NAME = ("setProperty."+PROVIDER_SECURITY_PROPERTY);
+
+   /* The SecurityPermission, with name {@link #GET_FACTORY_PERMISSION_NAME}, that is used to authorize access to the getFactory method  */
    public static final SecurityPermission getFactorySecurityPermission = new SecurityPermission(GET_FACTORY_PERMISSION_NAME);
+
+   /* The SecurityPermission, with name {@link #SET_FACTORY_PERMISSION_NAME}, that is used to authorize access to the setFactory method  */
    public static final SecurityPermission setFactorySecurityPermission = new SecurityPermission(SET_FACTORY_PERMISSION_NAME);
+
+   /* An instance of the SecurityPermission (with name {@link #PROVIDER_REGISTRATION_PERMISSION_NAME}) for use in authorizing access
+    * to the update methods of the factory implementation class  */
    public static final SecurityPermission providerRegistrationSecurityPermission = new SecurityPermission(PROVIDER_REGISTRATION_PERMISSION_NAME);
 
    /* The default AuthConfigFactory implementation  */
@@ -86,7 +103,9 @@ public abstract class AuthConfigFactory
     * @param listener the RegistrationListener to be detached.
     * @param layer a String identifying the message layer or null.
     * @param appContext a String value identifying the application contex or null.
-    * @return
+    * @return an array of String values where each value identifies a provider registration
+    *         from which the listener was removed. This method never returns null; it returns
+    *         an empty array if the listener was not removed from any registrations.
     */
    public abstract String[] detachListener(RegistrationListener  listener, String layer, 
          String appContext);

@@ -190,7 +190,7 @@ public class PrivateKeyCallback implements Callback
    
    /**
     * 
-    * @return
+    * @return the certificate chain, or null if the chain could not be found.
     */
    public Certificate[] getChain()
    {

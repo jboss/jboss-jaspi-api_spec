@@ -35,7 +35,7 @@ import javax.security.auth.message.ServerAuth;
  *   and response MessagePolicy objects to the encapsulated modules. The MessagePolicy objects 
  *   are obtained from the ServerAuthConfig instance that was provided when this ServerAuthContext 
  *   instance was created. 
- *   @See AuthContextFactory#getAuthContext for more information.
+ *   @see <code>ServerAuthConfig.getAuthContext</code> for more information.
  *   </p>
  *   <p>Implementations also have custom logic to determine what modules to invoke, and in 
  *   what order. In addition, this custom logic may control whether subsequent modules are 

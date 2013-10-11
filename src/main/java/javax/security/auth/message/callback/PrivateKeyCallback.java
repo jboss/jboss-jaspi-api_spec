@@ -1,16 +1,18 @@
 package javax.security.auth.message.callback;
 
+import javax.security.auth.callback.Callback;
+import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.x500.X500Principal;
-
 //$Id$
 
 /**
- *  Callback for private key and corresponding certificate chain.
+ *  <p>Callback for acquiring a Public Key Infrastructure (PKI) private key and its corresponding certificate chain.
+ *  This Callback may be used by client or server authentication modules to obtain private keys or private key
+ *  references, from key repositories available to the CallbackHandler that processes the Callback.</p>
+ *
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)
  *  @since  May 11, 2006 
@@ -27,7 +29,7 @@ public class PrivateKeyCallback implements Callback
    
    
    /** 
-    * Request type for private keys that are identified via an alias. 
+    * <p>Request type for private keys that are identified using an alias.</p>
     */
    public static class AliasRequest implements Request
    {
@@ -35,11 +37,13 @@ public class PrivateKeyCallback implements Callback
       
       /** 
        * <p>Construct an AliasRequest with an alias.</p>
+       *
        * <p>The alias is used to directly identify the private key to be returned. 
        * The corresponding certificate chain for the private key is also returned.</p>
        * 
        * <p>If the alias is null, the handler of the callback relies on its own default.</p>
-       * @param alias name identifier for the private key, or null.
+       *
+       * @param alias Name identifier for the private key, or null.
        */
       public AliasRequest(String alias)
       {
@@ -47,8 +51,9 @@ public class PrivateKeyCallback implements Callback
       }
       
       /**
-       * Get the alias. 
-       * @return the alias, or null.
+       * <p>Get the alias.</p>
+       *
+       * @return The alias, or null.
        */
       public String getAlias()
       {
@@ -57,7 +62,7 @@ public class PrivateKeyCallback implements Callback
    }
    
    /** 
-    * <p>Request type for private keys that are identified via an issuer/serial number.</p> 
+    * <p>Request type for private keys that are identified using an issuer/serial number.</p>
     */
    public static class IssuerSerialNumRequest implements Request
    {
@@ -66,9 +71,13 @@ public class PrivateKeyCallback implements Callback
       
       /** 
        * <p>Constructs a IssuerSerialNumRequest with an issuer/serial number.</p>
+       *
+       * <p>The issuer/serial number is used to identify a public key certificate. The corresponding private key is
+       * returned in the callback. The corresponding certificate chain for the private key is also returned. If the
+       * issuer/serialNumber parameters are null, the handler of the callback relies on its own defaults.</p>
        * 
-       * @param issuer the X500Principal name of the certificate issuer, or null.
-       * @param serialNumber the serial number of the certificate, or null.
+       * @param issuer The X500Principal name of the certificate issuer, or null.
+       * @param serialNumber The serial number of the certificate, or null.
        */
       public IssuerSerialNumRequest(X500Principal issuer, BigInteger serialNumber)
       {
@@ -77,8 +86,9 @@ public class PrivateKeyCallback implements Callback
       }
 
       /**
-       * Get the issuer. 
-       * @return the issuer, or null.
+       * <p>Get the issuer.</p>
+       *
+       * @return The issuer, or null.
        */
       public X500Principal getIssuer()
       {
@@ -86,8 +96,9 @@ public class PrivateKeyCallback implements Callback
       }
 
       /**
-       * Get the serial number.
-       * @return the issuer, or null.
+       * <p>Get the serial number.</p>
+       *
+       * @return The issuer, or null.
        */
       public BigInteger getSerialNum()
       {
@@ -110,7 +121,7 @@ public class PrivateKeyCallback implements Callback
        * <p>If the subjectKeyID is null, the handler of the callback relies on its 
        * own default.</p>
        * 
-       * @param keyID identifier for the private key, or null.
+       * @param keyID Identifier for the private key, or null.
        */
       public SubjectKeyIDRequest(byte[] keyID)
       {  
@@ -118,8 +129,9 @@ public class PrivateKeyCallback implements Callback
       }
       
       /**
-       * Get the subjectKeyID.
-       * @return the subjectKeyID, or null.
+       * <p>Get the subjectKeyID.</p>
+       *
+       * @return The subjectKeyID, or null.
        */
       public byte[] getSubjectKeyID()
       {
@@ -128,7 +140,7 @@ public class PrivateKeyCallback implements Callback
    } 
 
    /**
-    *  Request type for private keys that are identified using a certificate digest or thumbprint. 
+    *  <p>Request type for private keys that are identified using a certificate digest or thumbprint.</p>
     */
    public static class DigestRequest implements Request
    {
@@ -147,6 +159,11 @@ public class PrivateKeyCallback implements Callback
        * The corresponding certificate chain for the private key is also returned. If the digest or 
        * algorithm parameters are null, the handler of the callback relies on its own defaults.
        * </p>
+       *
+       * @param digest The digest value to use to select the corresponding certificate and private key (or null).
+       * @param algorithm - A string value identifying the digest algorithm. The value passed to this parameter may
+       *                    be null. If it is not null, it must conform to the requirements for the algorithm parameter of
+       *                    java.security.MessageDigest.getInstance().
        **/
       public DigestRequest( byte[] digest, String algorithm )
       {
@@ -154,11 +171,22 @@ public class PrivateKeyCallback implements Callback
          theAlgorithm = algorithm;
       }
 
+      /**
+       * <p>Get the digest value.</p>
+       *
+       * @return The digest value which must match the digest of the certificate corresponding to the returned
+       * private key
+       */
       public byte[] getDigest()
       {
           return theDigest;
       }
 
+      /**
+       * <p>Get the algorithm identifier.</p>
+       *
+       * @return The identifier of the algorithm used to compute the digest.
+       */
       public java.lang.String getAlgorithm()
       {
           return theAlgorithm;
@@ -175,13 +203,14 @@ public class PrivateKeyCallback implements Callback
    /**
     * 
     * <p>Constructs this PrivateKeyCallback with a private key Request object.</p>
+    *
     * <p>The request object identifies the private key to be returned. The corresponding 
     * certificate chain for the private key is also returned.</p>
     * 
     * <p>If the request object is null, the handler of the callback relies on its 
     * own default.</p>
     * 
-    * @param request identifier for the private key, or null.
+    * @param request Identifier for the private key, or null.
     */
    public PrivateKeyCallback(Request request)
    {
@@ -189,8 +218,9 @@ public class PrivateKeyCallback implements Callback
    }
    
    /**
-    * 
-    * @return the certificate chain, or null if the chain could not be found.
+    * <p>Used to obtain the certificate chain set within the Callback.</p>
+    *
+    * @return The certificate chain, or null if the chain could not be found.
     */
    public Certificate[] getChain()
    {
@@ -198,8 +228,9 @@ public class PrivateKeyCallback implements Callback
    }
    
    /**
-    * Get the requested private key.
-    * @return the private key, or null if the key could not be found.
+    * <p>Used to obtain the private key set within the Callback.</p>
+    *
+    * @return The private key, or null if the key could not be found.
     */
    public PrivateKey getKey()
    {
@@ -207,8 +238,9 @@ public class PrivateKeyCallback implements Callback
    }
 
    /**
-    * Get the Request object which identifies the private key to be returned.
-    * @return the Request object which identifies the private key to be returned, 
+    * <p>Used by the CallbackHandler to get the Request object that identifies the private key to be returned.</p>
+    *
+    * @return The Request object which identifies the private key to be returned,
     *         or null. If null, the handler of the callback relies on its own default.
     */
    public Request getRequest()
@@ -217,12 +249,13 @@ public class PrivateKeyCallback implements Callback
    }
 
    /**
-    * <p>Set the requested private key.</p>
-    * <p>If the requested private key or chain could not be found, then 
-    * both values must be set to null.</p>
+    * <p>Used by the CallbackHandler to set the requested private key and the corresponding certificate chain within
+    * the Callback.</p>
+    *
+    * <p>If the requested private key or chain could not be found, then both values must be set to null.</p>
     * 
-    * @param key the private key, or null.
-    * @param chain the corresponding certificate chain, or null.
+    * @param key The private key, or null.
+    * @param chain The corresponding certificate chain, or null.
     */
    public void setKey(PrivateKey key, Certificate[] chain)
    {

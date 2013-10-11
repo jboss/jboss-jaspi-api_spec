@@ -1,17 +1,16 @@
 package javax.security.auth.message.callback;
 
-import java.security.cert.CertStore;
-
 import javax.security.auth.callback.Callback;
+import java.security.cert.CertStore;
 
 //$Id$
 
 /**
- *  Callback for CertStore.
- *  A CertStore is a generic repository for certificates. 
- *  CertStores may be searched to locate public key certificates, as well 
- *  as to put together certificate chains. Such a search may be necessary 
- *  when the caller needs to verify a signature.
+ *  <p>Callback for CertStore.</p>
+ *
+ *  <p>A CertStore is a generic repository for certificates. CertStores may be searched to locate public key certificates,
+ *  as well as to put together certificate chains. Such a search may be necessary when the caller needs to verify a
+ *  signature.</p>
  *  
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)
@@ -23,17 +22,16 @@ public class CertStoreCallback implements Callback
    private CertStore certStore;
    
    /**
-    *  Create a CertStoreCallback. 
+    * <p>Create a CertStoreCallback.</p>
     */
    public CertStoreCallback()
    { 
    }
 
    /**
-    *  Get the requested CertStore.
+    * <p>Used by the CertStore user to obtain the CertStore set within the Callback.</p>
     * 
-    * @return the CertStore, or null. If null, the requester is assumed to 
-    * already have access to the relevant certificate and/or chain.
+    * @return The CertStore, or null.
     */
    public CertStore getCertStore()
    {
@@ -41,10 +39,9 @@ public class CertStoreCallback implements Callback
    }
 
    /** 
-    * Set the CertStore.
-    * @param certStore the certificate store, which may be null If null, the 
-    * requester is assumed to already have access to the relevant certificate 
-    * and/or chain.
+    * <p>Used by the CallbackHandler to set the CertStore within the Callback.</p>
+    *
+    * @param certStore The certificate store, which may be null.
     */
    public void setCertStore(CertStore certStore)
    {

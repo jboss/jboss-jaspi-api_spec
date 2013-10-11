@@ -5,18 +5,19 @@ import javax.security.auth.Subject;
 //$Id$
 
 /**
- *  An implementation of this interface is used to validate received service 
- *  request messages, and to secure service response messages.
+ *  <p>An implementation of this interface is used to validate received service request messages, and to secure service response messages.</p>
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
+ *  @see MessageInfo, javax.security.auth.Subject
  */
 public interface ServerAuth
 {
 
    /**
-    * Remove implementation specific principals and credentials from the subject.
+    * <p>Remove method specific principals and credentials from the subject.</p>
+    *
     * @param messageInfo - A contextual object that encapsulates the client request 
     *                      and server response objects, and that may be used to save 
     *                      state across a sequence of calls made to the methods of 
@@ -30,9 +31,12 @@ public interface ServerAuth
    throws AuthException;
    
    /**
-    * <p>Secure a service request message before sending it to the service.</p>
+    * <p>Secure a service response before sending it to the client. This method is called to transform the response
+    * message acquired by calling getResponseMessage (on messageInfo) into the mechanism-specific form to
+    * be sent by the runtime.</p>
     * 
-    * <p>Sign and encrpt the service request, for example.</p>
+    * <p>This method conveys the outcome of its message processing either by returning an AuthStatus value or by
+    * throwing an AuthException.</p>
     * 
     * @param messageInfo - A contextual object that encapsulates the client request 
     *                      and server response objects, and that may be used to save 
@@ -45,80 +49,74 @@ public interface ServerAuth
     *                      the request. If the Subject is not null, the method 
     *                      implementation may add additional Principals or credentials 
     *                      (pertaining to the source of the service request) to the Subject.
-    * @return an AuthStatus object representing the completion status of the processing 
-    *         performed by the module.
+    * @return An AuthStatus object representing the completion status of the processing performed by the
+    *         method. The AuthStatus values that may be returned by this method are defined as follows:
+    *
     *         <ul>
-    *            <li>AuthStatus.PROCEED returned when the application request message
-    *                was successfully secured. The runtime may proceed to send the 
-    *                request message. returned in AuthParam.</li>
-    *            <li>AuthStatus.RETRY returned when the module replaces the application 
-    *                request message with an mechanism specific message to be sent in 
-    *                advance of the application message. The runtime should throw an 
-    *                exception if it is unable to process the rety. Otherwise, the 
-    *                runtime should send the request message returned in AuthParam 
-    *                (and without calling secureRequest).</li>
-    *           <li>AuthStatus.ERROR returned when the processing by the module failed 
-    *               and indicates that the module has defined an appropriate error request
-    *               message in the AuthParam. The runtime may send the request message 
-    *               returned in AuthParam (without calling SecureRequest), and must 
-    *               discontinue its processing of the application request.</li>
-    *           </ul>
-    * @throws AuthException when the module wishes to signal a failure in securing 
-    *               the request and without establishing a corresponding error request 
-    *               message. The runtime must discontinue its processing of the message 
-    *               exchange.
+    *            <li>AuthStatus.SEND_SUCCESS when the application response message was successfully secured. The
+    *                secured response message may be obtained by calling getResponseMessage on messageInfo.</li>
+    *            <li>AuthStatus.SEND_CONTINUE to indicate that the application response message (within
+    *                messageInfo) was replaced with a security message that should elicit a security-specific response (in
+    *                the form of a request) from the peer. This status value serves to inform the calling runtime that (to
+    *                successfully complete the message exchange) it will need to be capable of continuing the message
+    *                dialog by processing at least one additional request/response exchange (after having sent the
+    *                response message returned in messageInfo). When this status value is returned, the application
+    *                response must be saved by the authentication module such that it can be recovered when the
+    *                module’s validateRequest message is called to process the elicited response.</li>
+    *           <li>AuthStatus.SEND_FAILURE to indicate that a failure occurred while securing the response message
+    *               and that an appropriate failure response message is available by calling getResponseMessage on
+    *               messageInfo.</li>
+    *         </ul>
+    * @throws AuthException When the message processing failed without establishing a failure response message (in messageInfo).
     */
    public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject)
    throws AuthException;
    
    /**
-    * <p>Validate a received service response.</p>
-    * 
-    * <p>This method is called to transform the mechanism-specific response message 
-    * acquired by calling getResponseMessage (on messageInfo) into the validated 
-    * application message to be returned to the message processing runtime. If 
-    * the response message is a (mechanism-specific) meta-message, the method 
-    * implementation must attempt to transform the meta-message into the next 
-    * mechanism-specific request message to be sent by the runtime.</p>
-    * 
+    * <p>Authenticate a received service request. This method is called to transform the mechanism-specific request
+    * message acquired by calling getRequestMessage (on messageInfo) into the validated application message
+    * to be returned to the message processing runtime. If the received message is a (mechanism-specific) meta-message,
+    * the method implementation must attempt to transform the meta-message into a corresponding mechanism-specific response message,
+    * or to the validated application request message. The runtime will bind a validated application message into the the
+    * corresponding service invocation.</p>
+    *
+    * <p>This method conveys the outcome of its message processing either by returning an AuthStatus value or by
+    * throwing an AuthException</p>
+    *
     * @param messageInfo - A contextual object that encapsulates the client 
     *                      request and server response objects, and that may be 
     *                      used to save state across a sequence of calls made to 
     *                      the methods of this interface for the purpose of 
     *                      completing a secure message exchange.
     * 
-    * @param clientSubject - A Subject that represents the recipient of the 
-    *                      service response, or null. It may be used by the method 
-    *                      implementation as the source of Principals or credentials 
-    *                      to be used to validate the response. If the Subject is 
-    *                      not null, the method implementation may add additional 
-    *                      Principals or credentials (pertaining to the recipient 
-    *                      of the service request) to the Subject.
+    * @param clientSubject - A Subject that represents the source of the service request. It is used by the
+    *                        method implementation to store Principals and credentials validated in the request.
     *                  
-    * @param serviceSubject - A Subject that represents the source of the service 
-    *                      response, or null. If the Subject is not null, the method 
-    *                      implementation may add additional Principals or credentials 
-    *                      (pertaining to the source of the service response) to the Subject.
-    * @return an AuthStatus object representing the completion status of the processing 
-    *         performed by the module.
+    * @param serviceSubject - A Subject that represents the recipient of the service request, or null. It may be
+    *                        used by the method implementation as the source of Principals or credentials to be used to validate the
+    *                        request. If the Subject is not null, the method implementation may add additional Principals or
+    *                        credentials (pertaining to the recipient of the service request) to the Subject.
+    *
+    * @return An AuthStatus object representing the completion status of the processing performed by the
+    *         method. The AuthStatus values that may be returned by this method are defined as follows:
+    *
     *         <ul>
-    *            <li>AuthStatus.PROCEED returned when the validation of the application 
-    *                response message succeded. The runtime may proceed to return the 
-    *                response message in the AuthParam to the application.</li>
-    *            <li>AuthStatus.RETRY returned when the message validation succeded, but 
-    *                when the validated message is a mechanism specific message sent in 
-    *                advance of the application message. The runtime must not proceed to 
-    *                process the response message in the AuthParam. The runtime should 
-    *                throw an exception if it is unable to process the retry. Otherwise, 
-    *                it should send the request message returned in AuthParam (and without 
-    *                calling secureRequest).</li>
-    *           <li>AuthStatus.ERROR returned when the validation failed and indicates 
-    *               that the module has defined an appropriate error request message in 
-    *               the AuthParam. The runtime must not proceed to process the response 
-    *               message in the AuthParam, and may send the request message returned in
-    *               AuthParam (and without calling secureRequest).</li>
-    *           </ul>
-    * @throws AuthException
+    *            <li>AuthStatus.SUCCESS when the application request message was successfully validated. The
+    *                validated request message is available by calling getRequestMessage on messageInfo.</li>
+    *            <li>AuthStatus.SEND_SUCCESS to indicate that validation/processing of the request message
+    *                successfully produced the secured application response message (in messageInfo). The secured
+    *                response message is available by calling getResponseMessage on messageInfo.</li>
+    *            <li>AuthStatus.SEND_CONTINUE to indicate that message validation is incomplete, and that a
+    *                preliminary response was returned as the response message in messageInfo. When this status value is
+    *                returned to challenge an application request message, the challenged request must be saved by the
+    *                authentication module such that it can be recovered when the module’s validateRequest message is
+    *                called to process the request returned for the challenge.</li>
+    *            <li>AuthStatus.SEND_FAILURE to indicate that message validation failed and that an appropriate
+    *                failure response message is available by calling getResponseMessage on messageInfo.</li>
+    *         </ul>
+    *
+    * @throws AuthException When the message processing failed without establishing a failure response
+    *                       message (in messageInfo).
     */
    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, 
          Subject serviceSubject)

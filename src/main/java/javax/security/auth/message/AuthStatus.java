@@ -3,8 +3,9 @@ package javax.security.auth.message;
 //$Id$
 
 /**
- *  <p>The AuthStatus class is used to represent return values from 
- *  Authentication modules.</p> 
+ *  <p>The AuthStatus class is used to represent return values from Authentication modules and Authentication
+ *  Contexts. An AuthStatus value is returned when the module processing has established a corresponding request
+ *  or response message within the message parameters exchanged with the runtime.</p>
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)
  *  @since  May 11, 2006 
@@ -48,9 +49,16 @@ public class AuthStatus
     */
    public static final AuthStatus SUCCESS = new AuthStatus(1);
    
-   private int status = -1; 
+   private int status = -1;
+
    private AuthStatus(int status)
    {
       this.status = status;
+   }
+
+   @Override
+   public String toString()
+   {
+      return AuthStatus.class.getSimpleName() + " : " + this.status;
    }
 }

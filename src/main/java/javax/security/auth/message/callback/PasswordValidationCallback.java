@@ -6,7 +6,10 @@ import javax.security.auth.callback.Callback;
 //$Id$
 
 /**
- *  Callback for PasswordValidation.
+ *  <p>Callback for PasswordValidation. This callback may be used by an authentication module to employ the
+ *  password validation facilities of its containing runtime. This Callback would typically be called by a
+ *  ServerAuthModule during validateRequest processing.</p>
+ *
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)
  *  @since  May 11, 2006 
@@ -21,10 +24,11 @@ public class PasswordValidationCallback implements Callback
    private Subject subject;
    
    /** 
-    * Create a new PasswordValidationCallback.
-    * 
-    * @param username the username to authenticate
-    * @param password the user's password, which may be null.
+    * <p>Create a PasswordValidationCallback.</p>
+    *
+    * @param subject  The subject for authentication
+    * @param username The username to authenticate
+    * @param password The user's password, which may be null.
     */
    public PasswordValidationCallback(Subject subject, String username, char[] password)
    {
@@ -34,7 +38,7 @@ public class PasswordValidationCallback implements Callback
    }
    
    /**
-    *  Clear the password.
+    *  <p>Clear the password.</p>
     */
    public void clearPassword()
    {
@@ -42,10 +46,11 @@ public class PasswordValidationCallback implements Callback
    }
    
    /**
-    * Get the password.
-    * <b>Note</b> that this method returns a reference to the password. If a clone 
+    * <p>Get the password.</p>
+    *
+    * <p><b>Note</b> that this method returns a reference to the password. If a clone
     * of the array is created it is the caller's responsibility to zero out 
-    * the password information after it is no longer needed.
+    * the password information after it is no longer needed.</p>
     * 
     * @return the password, which may be null.
     */
@@ -53,15 +58,21 @@ public class PasswordValidationCallback implements Callback
    {
       return this.password;
    }
-   
+
+   /**
+    * <p>Get the subject.</p>
+    *
+    * @return The subject.
+    */
    public Subject getSubject()
    {
       return this.subject;
    }
    
    /**
-    * Get the authentication result. 
-    * @return true if authentication succeeded, false otherwise
+    * <p>Get the authentication result.</p>
+    *
+    * @return true if authentication succeeded, false otherwise.
     */
    public boolean getResult()
    {
@@ -69,8 +80,9 @@ public class PasswordValidationCallback implements Callback
    }
    
    /**
-    * Get the username.   
-    * @return the username.
+    * <p>Get the username.</p>
+    *
+    * @return The username.
     */
    public String getUsername()
    {
@@ -78,9 +90,9 @@ public class PasswordValidationCallback implements Callback
    }
    
    /**
-    * Set the authentication result.
+    * <p>Set the authentication result.</p>
     * 
-    * @param result true if authentication succeeded, false otherwise
+    * @param result True if authentication succeeded, false otherwise.
     */
    public void setResult(boolean result)
    {

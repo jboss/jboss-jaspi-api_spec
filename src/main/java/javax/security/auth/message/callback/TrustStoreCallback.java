@@ -1,15 +1,15 @@
 package javax.security.auth.message.callback;
 
-import java.security.KeyStore;
-
 import javax.security.auth.callback.Callback;
+import java.security.KeyStore;
 
 //$Id$
 
 /**
- *  Callback for trusted certificate KeyStore.
- *  <p>A trusted certificate KeyStore may be used to determine whether a
- *  given certificate chain can be trusted.</p>
+ *  <p>Callback for trusted certificate KeyStore.</p>
+ *
+ *  <p>A trusted certificate KeyStore may be used to determine whether a given certificate chain can be trusted.</p>
+ *
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)
  *  @since  May 11, 2006 
@@ -20,16 +20,16 @@ public class TrustStoreCallback implements Callback
    private KeyStore trustStore;
 
    /** 
-    * Create a new TrustStoreCallback.
+    * <p>Create a new TrustStoreCallback.</p>
     */
    public TrustStoreCallback()
    { 
    }
    
    /**
-    * Get the requested trusted certificate KeyStore.
-    * @return the trusted certificate KeyStore. 
-    *         The KeyStore is guaranteed to already be loaded.
+    * <p>Used by the TrustStore user to obtain the TrustStore set within the Callback.</p>
+    *
+    * @return The trusted certificate KeyStore. The KeyStore is guaranteed to already be loaded.
     */
    public KeyStore getTrustStore()
    {
@@ -37,9 +37,9 @@ public class TrustStoreCallback implements Callback
    }
 
    /**
-    * Set the trusted certificate KeyStore.
-    * @param trustStore the trusted certificate KeyStore, which 
-    *           must already be loaded.
+    * <p>Used by the CallbackHandler to set the trusted certificate keystore within the Callback.</p>
+    *
+    * @param trustStore The trusted certificate KeyStore, which must already be loaded.
     */
    public void setTrustStore(KeyStore trustStore)
    {

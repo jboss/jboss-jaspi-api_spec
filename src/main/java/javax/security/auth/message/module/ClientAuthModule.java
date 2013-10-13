@@ -1,12 +1,11 @@
 package javax.security.auth.message.module;
 
-import java.util.Map;
- 
-import javax.security.auth.callback.CallbackHandler; 
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.ClientAuth;
 import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.config.ClientAuthContext;
+import java.util.Map;
 
 /**
  *  <p>A ClientAuthModule secures request messages, and validates received 
@@ -18,20 +17,22 @@ import javax.security.auth.message.config.ClientAuthContext;
  *  to do so may remain completely stateless. </p>
  *  
  *  <p>Every implementation of the interface must provide a public zero argument 
- *  contructor.</p>
+ *  constructor.</p>
  *  
  *  @see ClientAuthContext
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
+ *  @see ClientAuthContext
  */
 public interface ClientAuthModule extends ClientAuth
 {
    /**
-    * Get the one or more Class objects representing the message 
-    * types supported by the module.
-    * @return an array of Class objects where each element defines a message 
+    * <p>Get the one or more Class objects representing the message
+    * types supported by the module.</p>
+    *
+    * @return An array of Class objects where each element defines a message
     *         type supported by the module. A module should return an array 
     *         containing at least one element. An empty array indicates that the
     *         module will attempt to support any message type. This method never 
@@ -43,13 +44,15 @@ public interface ClientAuthModule extends ClientAuth
     * <p>Initialize this module with request and response message policies to 
     *    enforce, a CallbackHandler, and any module-specific configuration 
     *    properties.</p>
+    *
     * <p>The request policy and the response policy must not both be null.</p>
     * 
-    * @param requestPolicy the request policy this module must enforce, or null.
-    * @param responsePolicy the response policy this module must enforce, or null.
+    * @param requestPolicy The request policy this module must enforce, or null.
+    * @param responsePolicy The response policy this module must enforce, or null.
     * @param handler CallbackHandler used to request information.
-    * @param options a Map of module-specific configuration properties.
-    * @throws AuthException - if module initialization fails, including for the case 
+    * @param options A Map of module-specific configuration properties.
+    *
+    * @throws AuthException If module initialization fails, including for the case
     *                         where the options argument contains elements that are 
     *                         not supported by the module.
     */

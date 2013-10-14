@@ -13,7 +13,8 @@ import javax.security.auth.Subject;
  *  @since  May 11, 2006 
  *  @version $Revision$
  *
- *  @see MessageInfo, javax.security.auth.Subject subject
+ *  @see MessageInfo
+ *  @see javax.security.auth.Subject subject
  */
 public interface ClientAuth
 {

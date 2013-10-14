@@ -24,7 +24,7 @@ import java.util.Map;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see ServerAuthContext
+ *  @see javax.security.auth.message.config.ServerAuthContext
  */
 public interface ServerAuthModule extends ServerAuth 
 {

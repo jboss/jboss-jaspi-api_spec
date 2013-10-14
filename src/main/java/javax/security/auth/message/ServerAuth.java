@@ -10,7 +10,8 @@ import javax.security.auth.Subject;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see MessageInfo, javax.security.auth.Subject
+ *  @see MessageInfo
+ *  @see javax.security.auth.Subject
  */
 public interface ServerAuth
 {

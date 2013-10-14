@@ -11,7 +11,10 @@ package javax.security.auth.message;
  *  @since  May 11, 2006 
  *  @version $Revision$
  *
- *  @see javax.security.auth.message.config.ClientAuthContext, ServerAuthContext, ClientAuthModule, ServerAuthModule
+ *  @see javax.security.auth.message.config.ClientAuthContext
+ *  @see javax.security.auth.message.config.ServerAuthContext
+ *  @see javax.security.auth.message.module.ClientAuthModule
+ *  @see javax.security.auth.message.module.ServerAuthModule
  */
 public class MessagePolicy
 { 
@@ -109,7 +112,8 @@ public class MessagePolicy
     * represented using an implementation of the Target interface matched to the message types in MessageInfo. The
     * message protection policy is identified by an implementation of the ProtectionPolicy interface.</p>
     *
-    * @see javax.security.auth.message.module.ClientAuthModule, ServerAuthModule
+    * @see javax.security.auth.message.module.ClientAuthModule
+    * @see javax.security.auth.message.module.ServerAuthModule
     */
    public static class TargetPolicy
    {

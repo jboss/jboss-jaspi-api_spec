@@ -41,7 +41,8 @@ import javax.security.auth.message.ClientAuth;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see ClientAuthConfig, ClientAuthModule
+ *  @see ClientAuthConfig
+ *  @see javax.security.auth.message.module.ClientAuthModule
  */
 public interface ClientAuthContext extends ClientAuth
 { 

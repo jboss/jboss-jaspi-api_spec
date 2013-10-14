@@ -74,7 +74,11 @@ import java.util.Map;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see ClientAuthContext, ServerAuthContext, ClientAuthConfig,ServerAuthConfig, java.util.Properties
+ *  @see ClientAuthContext
+ *  @see ServerAuthContext
+ *  @see ClientAuthConfig
+ *  @see ServerAuthConfig
+ *  @see java.util.Properties
  */
 public abstract class AuthConfigFactory
 {

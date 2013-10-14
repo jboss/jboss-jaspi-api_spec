@@ -45,7 +45,8 @@ import javax.security.auth.message.ServerAuth;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see ServerAuthConfig, ServerAuthModule
+ *  @see ServerAuthConfig
+ *  @see javax.security.auth.message.module.ServerAuthModule
  */
 public interface ServerAuthContext extends ServerAuth
 {

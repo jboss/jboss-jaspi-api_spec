@@ -11,7 +11,8 @@ import javax.security.auth.message.MessageInfo;
  *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
  *  @since  May 12, 2006 
  *  @version $Revision$
- *  @see ClientAuthContext, ServerAuthContext
+ *  @see ClientAuthContext
+ *  @see ServerAuthContext
  */
 public interface AuthConfig
 {

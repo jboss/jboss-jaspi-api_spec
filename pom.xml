@@ -11,7 +11,7 @@
 
   <groupId>org.jboss.spec.javax.security.auth.message</groupId>
   <artifactId>jboss-jaspi-api_1.1_spec</artifactId>
-  <version>1.0.1.Final</version>
+  <version>1.0.2.Final-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>JBoss Java Authentication SPI for Containers 1.1 API</name>
@@ -34,7 +34,7 @@
     <connection>scm:git:git@github.com:jboss/jboss-jaspi-api_spec.git</connection>
     <developerConnection>scm:git:git@github.com:jboss/jboss-jaspi-api_spec.git</developerConnection>
     <url>https://github.com/jboss/jboss-jaspi-api_spec</url>
-    <tag>jboss-jaspi-api_1.1_spec-1.0.1.Final</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <maven.compiler.target>1.7</maven.compiler.target>

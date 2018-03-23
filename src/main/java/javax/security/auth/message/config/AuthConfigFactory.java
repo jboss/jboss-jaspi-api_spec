@@ -69,10 +69,10 @@ import java.util.Map;
  *
  *  <p>An AuthConfigFactory implementation is free to choose is own persistent declarative syntax as long as it
  *  conforms to the requirements defined by this class.</p>
- *  
+ *
  *  @author <a href="mailto:Anil.Saldhana@jboss.org">Anil Saldhana</a>
- *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a> 
- *  @since  May 12, 2006 
+ *  @author Charlie Lai, Ron Monzillo (Javadoc for JSR-196)</a>
+ *  @since  May 12, 2006
  *  @version $Revision$
  *  @see ClientAuthContext
  *  @see ServerAuthContext
@@ -111,11 +111,11 @@ public abstract class AuthConfigFactory
 
    /* The default AuthConfigFactory implementation  */
    private static final String FACTORY_IMPL = "org.jboss.security.auth.message.config.JBossAuthConfigFactory";
-   
+
    public AuthConfigFactory()
-   { 
+   {
    }
-   
+
    /**
     * <p>Disassociate the listener from all the provider registrations whose layer and
     * appContext values are matched by the corresponding arguments to this method.</p>
@@ -124,7 +124,7 @@ public abstract class AuthConfigFactory
     *
     * <p>When a SecurityManager is enabled, and before making any changes to the factory, this method must
     * confirm that the calling access control context has been granted the providerRegistrationSecurityPermission.</p>
-    * 
+    *
     * @param listener The RegistrationListener to be detached.
     * @param layer A String identifying the message layer or null.
     * @param appContext A String value identifying the application context or null.
@@ -132,9 +132,9 @@ public abstract class AuthConfigFactory
     *         from which the listener was removed. This method never returns null; it returns
     *         an empty array if the listener was not removed from any registrations.
     */
-   public abstract String[] detachListener(RegistrationListener  listener, String layer, 
+   public abstract String[] detachListener(RegistrationListener  listener, String layer,
          String appContext);
-   
+
    /**
     * <p>Get a registered AuthConfigProvider from the factory. Get the provider of
     * ServerAuthConfig and ClientAuthConfig objects registered for the identified
@@ -158,27 +158,27 @@ public abstract class AuthConfigFactory
     *
     * <p>The above precedence rules apply equivalently to registrations created with a null or non-null className
     * argument.</p>
-    * 
+    *
     * @param layer A String identifying the message layer for which the registered AuthConfigProvider is to be returned.
     *              This argument may be null.
     * @param appContext A String that identifies the application messaging context for which the registered
     *                   AuthConfigProvider is to be returned. The value of this argument may be null.
-    * @param listener the RegistrationListener whose notify method is to be invoked 
-    *             if the corresponding registration is unregistered or replaced. The 
+    * @param listener the RegistrationListener whose notify method is to be invoked
+    *             if the corresponding registration is unregistered or replaced. The
     *             value of this argument may be null.
     *
     * @return The implementation of the AuthConfigProvider interface registered at the factory for the layer and
     *         appContext or null, if no AuthConfigProvider is selected.An argument listener is attached even if the return value is null.
     */
-   public abstract AuthConfigProvider  getConfigProvider( String layer, 
+   public abstract AuthConfigProvider  getConfigProvider( String layer,
          String appContext, RegistrationListener listener);
-   
+
    /**
     * <p>Get the system-wide AuthConfigFactory implementation.</p>
     *
-    * <p>If a non-null system-wide factory instance is defined at the time of the call, 
+    * <p>If a non-null system-wide factory instance is defined at the time of the call,
     * for example, with setFactory, it will be returned. Otherwise, an attempt will be made to
-    * construct an instance of the default AuthConfigFactory implementation class. The 
+    * construct an instance of the default AuthConfigFactory implementation class. The
     * fully qualified class name of the default factory implementation class is obtained
     * from the value of the DEFAULT_FACTORY_SECURITY_PROPERTY security property.  When an
     * instance of the default factory implementation class is successfully constructed by
@@ -190,11 +190,11 @@ public abstract class AuthConfigFactory
     * <p>When a SecurityManager is enabled, the getFactorySecurityPermission will be required to
     * call this method. If at the time of the call, a system-wide factory instance has not already been defined, then
     * the setFactorySecurityPermission will also be required.</p>
-    * 
+    *
     * @return The non-null system-wide AuthConfigFactory instance set at the time of the
-    *         call, or if that value was null, the value of the system-wide factory 
-    *         instance established by this method. This method returns null when the 
-    *         system-wide factory was not defined when this method was called and no 
+    *         call, or if that value was null, the value of the system-wide factory
+    *         instance established by this method. This method returns null when the
+    *         system-wide factory was not defined when this method was called and no
     *         default factory name was defined via the security property.
     *
     * @throws SecurityException If the caller does not have permission to retrieve the factory,
@@ -207,10 +207,13 @@ public abstract class AuthConfigFactory
       //Validate the caller permission
       SecurityManager sm = System.getSecurityManager();
       if (sm != null)
-         sm.checkPermission(new SecurityPermission("getFactory"));
+         sm.checkPermission(getFactorySecurityPermission);
 
       if (_factory == null)
       {
+          if (sm != null)
+              sm.checkPermission(setFactorySecurityPermission);
+
          String factoryName = null;
          Class clazz = null;
          try
@@ -431,10 +434,14 @@ public abstract class AuthConfigFactory
     * @throws SecurityException If the caller does not have permission to set the factory.
     */
    public static void setFactory(AuthConfigFactory factory)
-   { 
+   {
+       SecurityManager securityManager = System.getSecurityManager();
+       if (securityManager != null)
+           securityManager.checkPermission(setFactorySecurityPermission);
+
       _factory = factory;
    }
-   
+
    /**
     * <p>Represents the layer identifier, application context identifier., and description
     * components of an AuthConfigProvider registration at the factory.</p>
@@ -443,20 +450,20 @@ public abstract class AuthConfigFactory
    {
       /**
        * <p>Get the application context identifier from the registration context.</p>
-       * 
+       *
        * @return A String identifying the application context for which the
        *         AuthConfigProvider was registered. The returned value may be null.
        */
       String getAppContext();
-      
+
       /**
        * <p>Get the description from the registration context.</p>
-       * 
+       *
        * @return The description String from the registration, or null, if no
        *         description string was included in the registration.
        */
       String getDescription();
-      
+
       /**
        * <p>Get the layer name from the registration context.</p>
        *
@@ -476,9 +483,9 @@ public abstract class AuthConfigFactory
    }
 
    /** <p>A PrivilegedExceptionAction that looks up the class name identified
-    * by the authcontextfactory.provider system property and loads the class 
+    * by the authcontextfactory.provider system property and loads the class
     * using the thread context class loader.</p>
-    */ 
+    */
    private static class LoadAction implements PrivilegedExceptionAction
    {
       private String name;
